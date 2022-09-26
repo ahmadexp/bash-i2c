@@ -2,8 +2,8 @@
 
 # code written by Ahmad Byagowi for demonstration purposes of the AD7414 chip over the i2c bus
 
-I2CBUS=2
-DEVADDR=0x4f
+AD7414_I2CBUS=2
+AD7414_DEVADDR=0x4f
 
 AD7414_VAL=0x00
 AD7414_CONF=0x01
@@ -14,12 +14,12 @@ AD7414_DEF_CONF=0x40
 
 #set default configuration
 function init_default_config(){
-i2cset -y $I2CBUS $DEVADDR $AD7414_CONF $AD7414_DEF_CONF
+i2cset -y $AD7414_I2CBUS $AD7414_DEVADDR $AD7414_CONF $AD7414_DEF_CONF
 }
 
 #read temperature value register 
 function read_temperature(){
-local raw_val=$(($(i2cget -y $I2CBUS $DEVADDR $AD7414_VAL w)))
+local raw_val=$(($(i2cget -y $AD7414_I2CBUS $AD7414_DEVADDR $AD7414_VAL w)))
 local lo_val=$(("$raw_val">>14))
 local hi_val=$(("$raw_val"&0xff))
 local code_val=$(("$lo_val"|$(("$hi_val"<<2))))
