@@ -2,8 +2,8 @@
 
 # code written by Ahmad Byagowi for demonstration purposes of the TSL2575 chip over the i2c bus
 
-I2CBUS=10
-DEVADDR=0x39
+TSL2572_I2CBUS=10
+TSL2572_DEVADDR=0x39
 
 TSL2572_GAIN_1X=1
 TSL2572_GAIN_8X=8
@@ -23,45 +23,45 @@ TSL2572_CMDS_STATUS=0x93
 
 #initialize
 function init_light(){
-i2cget -y $I2CBUS $DEVADDR $TSL2572_CMDS_WHOAMI
+i2cget -y $TSL2572_I2CBUS $TSL2572_DEVADDR $TSL2572_CMDS_WHOAMI
 }
 
 #enable sensor
 function enable_light(){
 TSL2572_GAIN=$1
 if [ "$1" -eq "$TSL2572_GAIN_1X" ];then
-i2cset -y $I2CBUS $DEVADDR $TSL2572_CMDS_CONTROL 0x00
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR $TSL2572_CMDS_CONTROL 0x00
 fi
 if [ "$1" -eq "$TSL2572_GAIN_8X" ];then
-i2cset -y $I2CBUS $DEVADDR $TSL2572_CMDS_CONTROL 0x01
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR $TSL2572_CMDS_CONTROL 0x01
 fi
 if [ "$1" -eq "$TSL2572_GAIN_16X" ];then
-i2cset -y $I2CBUS $DEVADDR $TSL2572_CMDS_CONTROL 0x10
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR $TSL2572_CMDS_CONTROL 0x10
 fi
 if [ "$1" -eq "$TSL2572_GAIN_120X" ];then
-i2cset -y $I2CBUS $DEVADDR $TSL2572_CMDS_CONTROL 0x11
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR $TSL2572_CMDS_CONTROL 0x11
 fi
-i2cset -y $I2CBUS $DEVADDR $TSL2572_CMDS_ALS_TIMING 0xed #51.87ms
-i2cset -y $I2CBUS $DEVADDR $TSL2572_CMDS_ENABLE 0x03
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR $TSL2572_CMDS_ALS_TIMING 0xed #51.87ms
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR $TSL2572_CMDS_ENABLE 0x03
 if [ "$1" -eq "$TSL2572_GAIN_1X" ] || [ "$1" -eq "$TSL2572_GAIN_8X" ]; then
-i2cset -y $I2CBUS $DEVADDR $TSL2572_CMDS_CONFIG 0x04
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR $TSL2572_CMDS_CONFIG 0x04
 fi
 }
 
 function disable_lightsensor(){
-i2cset -y $I2CBUS $DEVADDR $TSL2572_CMDS_ENABLE 0
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR $TSL2572_CMDS_ENABLE 0
 }
 
 function light(){
 
-i2cset -y $I2CBUS $DEVADDR 0xb4 0x1
-local c0l=$(($(i2cget -y $I2CBUS $DEVADDR 0x14 w)))
-i2cset -y $I2CBUS $DEVADDR 0x00 0x1
-local c0h=$(($(i2cget -y $I2CBUS $DEVADDR 0x15 w)))
-i2cset -y $I2CBUS $DEVADDR 0x00 0x1
-local c1l=$(($(i2cget -y $I2CBUS $DEVADDR 0x16 w)))
-i2cset -y $I2CBUS $DEVADDR 0x00 0x1
-local c1h=$(($(i2cget -y $I2CBUS $DEVADDR 0x17 w)))
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR 0xb4 0x1
+local c0l=$(($(i2cget -y $TSL2572_I2CBUS $TSL2572_DEVADDR 0x14 w)))
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR 0x00 0x1
+local c0h=$(($(i2cget -y $TSL2572_I2CBUS $TSL2572_DEVADDR 0x15 w)))
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR 0x00 0x1
+local c1l=$(($(i2cget -y $TSL2572_I2CBUS $TSL2572_DEVADDR 0x16 w)))
+i2cset -y $TSL2572_I2CBUS $TSL2572_DEVADDR 0x00 0x1
+local c1h=$(($(i2cget -y $TSL2572_I2CBUS $TSL2572_DEVADDR 0x17 w)))
 
 local c0=$(($(($(($c0h<<8))|$c0l))))
 local c1=$(($(($(($c1h<<8))|$c1l))))

@@ -2,50 +2,50 @@
 
 # code written by Ahmad Byagowi for demonstration purposes of the BMP280 chip over the i2c bus
 
-I2CBUS=3
-DEVADDR=0x77
+BMP280_I2CBUS=3
+BMP280_DEVADDR=0x77
 
-TEMP_XLSB=0xFC
-TEMP_LSB=0xFB
-TEMP_MSB=0xFA
-PRESS_XLSB=0xF9
-PRESS_LSB=0xF8
-PRESS_MSB=0xF7
-CONFIG=0xF5
-CTRL_MEAS=0xF4
+BMP280_TEMP_XLSB=0xFC
+BMP280_TEMP_LSB=0xFB
+BMP280_TEMP_MSB=0xFA
+BMP280_PRESS_XLSB=0xF9
+BMP280_PRESS_LSB=0xF8
+BMP280_PRESS_MSB=0xF7
+BMP280_CONFIG=0xF5
+BMP280_CTRL_MEAS=0xF4
 
-DIG_T1_ADDR=0x88
-DIG_T2_ADDR=0x8A
-DIG_T3_ADDR=0x8C
+BMP280_DIG_T1_ADDR=0x88
+BMP280_DIG_T2_ADDR=0x8A
+BMP280_DIG_T3_ADDR=0x8C
 
-DIG_P1_ADDR=0x8E
-DIG_P2_ADDR=0x90
-DIG_P3_ADDR=0x92
-DIG_P4_ADDR=0x94
-DIG_P5_ADDR=0x96
-DIG_P6_ADDR=0x98
-DIG_P7_ADDR=0x9A
-DIG_P8_ADDR=0x9C
-DIG_P9_ADDR=0x9E
+BMP280_DIG_P1_ADDR=0x8E
+BMP280_DIG_P2_ADDR=0x90
+BMP280_DIG_P3_ADDR=0x92
+BMP280_DIG_P4_ADDR=0x94
+BMP280_DIG_P5_ADDR=0x96
+BMP280_DIG_P6_ADDR=0x98
+BMP280_DIG_P7_ADDR=0x9A
+BMP280_DIG_P8_ADDR=0x9C
+BMP280_DIG_P9_ADDR=0x9E
 
 #initialize BMP280 to perform normal
-i2cset -y $I2CBUS $DEVADDR $CONFIG 0xFF
-i2cset -y $I2CBUS $DEVADDR $CTRL_MEAS 0xFF
+i2cset -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_CONFIG 0xFF
+i2cset -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_CTRL_MEAS 0xFF
 
 readWord(){
-echo $(($(i2cget -y $I2CBUS $DEVADDR $(($1+0)) w)))
+echo $(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $(($1+0)) w)))
 }
 
 function temperature(){
-	local adc_T_msb=$(($(i2cget -y $I2CBUS $DEVADDR $TEMP_MSB)))
-	local adc_T_lsb=$(($(i2cget -y $I2CBUS $DEVADDR $TEMP_LSB)))
-	local adc_T_xlsb=$(($(i2cget -y $I2CBUS $DEVADDR $TEMP_XLSB)))
-	local dig_T1=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_T1_ADDR w)))
-	local dig_T2=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_T2_ADDR w)))
+	local adc_T_msb=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_TEMP_MSB)))
+	local adc_T_lsb=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_TEMP_LSB)))
+	local adc_T_xlsb=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_TEMP_XLSB)))
+	local dig_T1=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_T1_ADDR w)))
+	local dig_T2=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_T2_ADDR w)))
 	if [ "$dig_T2" -gt "32767" ]; then
                 dig_T2=$(("$dig_T2-65536"))
         fi
-	local dig_T3=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_T3_ADDR w)))
+	local dig_T3=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_T3_ADDR w)))
 	if [ "$dig_T3" -gt "32767" ]; then
                 dig_T3=$(("$dig_T3-65536"))
         fi
@@ -58,15 +58,15 @@ function temperature(){
 }
 
 function pressure(){
-	local adc_T_msb=$(($(i2cget -y $I2CBUS $DEVADDR $TEMP_MSB)))
-        local adc_T_lsb=$(($(i2cget -y $I2CBUS $DEVADDR $TEMP_LSB)))
-        local adc_T_xlsb=$(($(i2cget -y $I2CBUS $DEVADDR $TEMP_XLSB)))
-        local dig_T1=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_T1_ADDR w)))
-	local dig_T2=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_T2_ADDR w)))
+	local adc_T_msb=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_TEMP_MSB)))
+        local adc_T_lsb=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_TEMP_LSB)))
+        local adc_T_xlsb=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_TEMP_XLSB)))
+        local dig_T1=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_T1_ADDR w)))
+	local dig_T2=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_T2_ADDR w)))
         if [ "$dig_T2" -gt "32767" ]; then
                 dig_T2=$(("$dig_T2-65536"))
         fi
-	local dig_T3=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_T3_ADDR w)))
+	local dig_T3=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_T3_ADDR w)))
 	if [ "$dig_T2" -gt "32767" ]; then
                 dig_T2=$(("$dig_T2-65536"))
         fi
@@ -78,39 +78,39 @@ function pressure(){
 
         local t_fine=$(($var1+$var2))
 
-        local adc_P_msb=$(($(i2cget -y $I2CBUS $DEVADDR $PRESS_MSB)))
-        local adc_P_lsb=$(($(i2cget -y $I2CBUS $DEVADDR $PRESS_LSB)))
-        local adc_P_xlsb=$(($(i2cget -y $I2CBUS $DEVADDR $PRESS_XLSB)))
-        local dig_P1=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_P1_ADDR w)))
-	local dig_P2=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_P2_ADDR w)))
+        local adc_P_msb=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_PRESS_MSB)))
+        local adc_P_lsb=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_PRESS_LSB)))
+        local adc_P_xlsb=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_PRESS_XLSB)))
+        local dig_P1=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_P1_ADDR w)))
+	local dig_P2=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_P2_ADDR w)))
         if [ "$dig_P2" -gt "32767" ]; then
                 dig_P2=$(("$dig_P2-65536"))
         fi
-	local dig_P3=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_P3_ADDR w)))
+	local dig_P3=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_P3_ADDR w)))
 	if [ "$dig_P3" -gt "32767" ]; then
                 dig_P3=$(("$dig_P3-65536"))
         fi
-	local dig_P4=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_P4_ADDR w)))
+	local dig_P4=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_P4_ADDR w)))
         if [ "$dig_P4" -gt "32767" ]; then
                 dig_P4=$(("$dig_P4-65536"))
         fi
-	local dig_P5=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_P5_ADDR w)))
+	local dig_P5=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_P5_ADDR w)))
         if [ "$dig_P5" -gt "32767" ]; then
                 dig_P5=$(("$dig_P5-65536"))
         fi
-	local dig_P6=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_P6_ADDR w)))
+	local dig_P6=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_P6_ADDR w)))
 	if [ "$dig_P6" -gt "32767" ]; then
                 dig_P6=$(("$dig_P6-65536"))
         fi
-	local dig_P7=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_P7_ADDR w)))
+	local dig_P7=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_P7_ADDR w)))
         if [ "$dig_P7" -gt "32767" ]; then
                 dig_P7=$(("$dig_P7-65536"))
         fi
-	local dig_P8=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_P8_ADDR w)))
+	local dig_P8=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_P8_ADDR w)))
         if [ "$dig_P8" -gt "32767" ]; then
                 dig_P8=$(("$dig_P8-65536"))
         fi
-	local dig_P9=$(($(i2cget -y $I2CBUS $DEVADDR $DIG_P9_ADDR w)))
+	local dig_P9=$(($(i2cget -y $BMP280_I2CBUS $BMP280_DEVADDR $BMP280_DIG_P9_ADDR w)))
 	if [ "$dig_P9" -gt "32767" ]; then
                 dig_P9=$(("$dig_P9-65536"))
         fi

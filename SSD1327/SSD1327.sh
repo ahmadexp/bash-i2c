@@ -2,17 +2,17 @@
 
 # code written by Ahmad Byagowi for demonstration purposes of the SSD1327 OLED module over the i2c bus
 
-I2CBUS=2
-DEVADDR=0x3D
+SSD1327_I2CBUS=2
+SSD1327_DEVADDR=0x3D
 
 #set default configuration
 function init_temp_sensor_default_config(){
-i2cset -y $I2CBUS $TEMP_DEVADDR $AD7414_CONF $AD7414_DEF_CONF
+i2cset -y $SSD1327_I2CBUS $TEMP_SSD1327_DEVADDR $AD7414_CONF $AD7414_DEF_CONF
 }
 
 #read temperature value register 
 function read_temperature(){
-local raw_val=$(($(i2cget -y $I2CBUS $TEMP_DEVADDR $AD7414_VAL w)))
+local raw_val=$(($(i2cget -y $SSD1327_I2CBUS $TEMP_SSD1327_DEVADDR $AD7414_VAL w)))
 local lo_val=$(("$raw_val">>14))
 local hi_val=$(("$raw_val"&0xff))
 local code_val=$(("$lo_val"|$(("$hi_val"<<2))))
@@ -131,57 +131,57 @@ font=(
 
 
 function display_off() {
-i2cset -y $I2CBUS $DEVADDR 0x00 0xAB # Set Display offset
-i2cset -y $I2CBUS $DEVADDR 0x00 0x00 # Set Display offset
-i2cset -y $I2CBUS $DEVADDR 0x00 0xAE # Display OFF (sleep mode)
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xAB # Set Display offset
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0x00 # Set Display offset
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xAE # Display OFF (sleep mode)
 sleep 0.1
 }
 
 function init_display() {
-i2cset -y $I2CBUS $DEVADDR 0x00 0xFD 0x01 0x12 i # Unlock
-i2cset -y $I2CBUS $DEVADDR 0x00 0xAE 0x00 i  # Display off
-i2cset -y $I2CBUS $DEVADDR 0x00 0x15 0x00 0x3F i  # Set Column address
-i2cset -y $I2CBUS $DEVADDR 0x00 0x75 0x00 0x7F i  # Set Row address
-i2cset -y $I2CBUS $DEVADDR 0x00 0xA1 0x00  i  # Set Start line
-i2cset -y $I2CBUS $DEVADDR 0x00 0xA2 0x00 i  # Set Display offset
-i2cset -y $I2CBUS $DEVADDR 0x00 0xA0 0x14 0x11 i  # Set Display offset
-i2cset -y $I2CBUS $DEVADDR 0x00 0xA8 0x7F i  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0xAB 0x01 i  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0xB1 0xE2 i  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0xB3 0x91 i  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0xBC 0x08 i  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0xBE 0x07 i  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0xB6 0x01 i  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0xD5 0x62 i  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0xb8 0x0f 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 0x10 0x18 0x20 0x2f 0x38 0x3f i  
-i2cset -y $I2CBUS $DEVADDR 0x00 0xB9  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0x81 0x7F i  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0xA4 # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0x2E  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0xAF  # 
-i2cset -y $I2CBUS $DEVADDR 0x00 0xCA 0x3F i  # S
-i2cset -y $I2CBUS $DEVADDR 0x00 0xA0 0x51 0x42 i  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xFD 0x01 0x12 i # Unlock
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xAE 0x00 i  # Display off
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0x15 0x00 0x3F i  # Set Column address
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0x75 0x00 0x7F i  # Set Row address
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xA1 0x00  i  # Set Start line
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xA2 0x00 i  # Set Display offset
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xA0 0x14 0x11 i  # Set Display offset
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xA8 0x7F i  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xAB 0x01 i  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xB1 0xE2 i  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xB3 0x91 i  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xBC 0x08 i  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xBE 0x07 i  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xB6 0x01 i  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xD5 0x62 i  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xb8 0x0f 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 0x10 0x18 0x20 0x2f 0x38 0x3f i  
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xB9  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0x81 0x7F i  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xA4 # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0x2E  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xAF  # 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xCA 0x3F i  # S
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xA0 0x51 0x42 i  # 
 
 }
 
 function display_on() {
-i2cset -y $I2CBUS $DEVADDR 0x00 0xAB  # Display ON (normal mode)
-i2cset -y $I2CBUS $DEVADDR 0x00 0x01  # Set Display offset
-i2cset -y $I2CBUS $DEVADDR 0x00 0xAF  # Set Display offset
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xAB  # Display ON (normal mode)
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0x01  # Set Display offset
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0xAF  # Set Display offset
 
 sleep 0.001
 }
 
 function reset_cursor() {
-   i2cset -y $I2CBUS $DEVADDR 0x00 0x15 0x00 0x3F 0x75 0x00 0x7F i 
+   i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0x15 0x00 0x3F 0x75 0x00 0x7F i 
 }
 
 function set_cursor() {
-  i2cset -y $I2CBUS $DEVADDR 0x00 0x15 $(( ${1} >> 1 ))  0x3F 0x75 ${2} 0x7F i 
+  i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0x15 $(( ${1} >> 1 ))  0x3F 0x75 ${2} 0x7F i 
 }
 
 function set_WriteZone() {
-  i2cset -y $I2CBUS $DEVADDR 0x00 0x15 ${1} ${2} 0x75 ${3} ${4} i 
+  i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0x15 ${1} ${2} 0x75 ${3} ${4} i 
 }
 
 function frameToOLED(){
@@ -211,18 +211,18 @@ function showtext() {
       charout="${charout} ${font[charp+b]}"    # build character out of single values
     done
     # echo "${a}: ${text:${a}:1} -> ${achar} -> ${charp} -> ${charout}"
-  i2cset -y $I2CBUS $DEVADDR 0x40 ${charout} i                      # send character bytes to display
+  i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x40 ${charout} i                      # send character bytes to display
   done
 }
 
 function loadBuffer(){
-i2cset -y $I2CBUS $DEVADDR 0x00 0x15 0x00 0x3F 0x75 0x00 0x7F i 
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x00 0x15 0x00 0x3F 0x75 0x00 0x7F i 
 for ((i=0;i<256;i++)) do
   for ((j=0;j<32;j++)) do
     local pointer=$(( $j+(($i<<5)) ))
     tempBuff[$j]=${frameBuffer[$pointer]}
   done
-   i2cset -y $I2CBUS $DEVADDR 0x40 ${tempBuff[0]} ${tempBuff[1]} ${tempBuff[2]} ${tempBuff[3]} ${tempBuff[4]} ${tempBuff[5]} ${tempBuff[6]} ${tempBuff[7]} ${tempBuff[8]} ${tempBuff[9]} ${tempBuff[10]} ${tempBuff[11]} ${tempBuff[12]} ${tempBuff[13]} ${tempBuff[14]} ${tempBuff[15]} ${tempBuff[16]} ${tempBuff[17]} ${tempBuff[18]} ${tempBuff[19]} ${tempBuff[20]} ${tempBuff[21]} ${tempBuff[22]} ${tempBuff[23]} ${tempBuff[24]} ${tempBuff[25]} ${tempBuff[26]} ${tempBuff[27]} ${tempBuff[28]} ${tempBuff[29]} ${tempBuff[30]} ${tempBuff[31]} i
+   i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x40 ${tempBuff[0]} ${tempBuff[1]} ${tempBuff[2]} ${tempBuff[3]} ${tempBuff[4]} ${tempBuff[5]} ${tempBuff[6]} ${tempBuff[7]} ${tempBuff[8]} ${tempBuff[9]} ${tempBuff[10]} ${tempBuff[11]} ${tempBuff[12]} ${tempBuff[13]} ${tempBuff[14]} ${tempBuff[15]} ${tempBuff[16]} ${tempBuff[17]} ${tempBuff[18]} ${tempBuff[19]} ${tempBuff[20]} ${tempBuff[21]} ${tempBuff[22]} ${tempBuff[23]} ${tempBuff[24]} ${tempBuff[25]} ${tempBuff[26]} ${tempBuff[27]} ${tempBuff[28]} ${tempBuff[29]} ${tempBuff[30]} ${tempBuff[31]} i
 
 done
 }
@@ -259,7 +259,7 @@ frameBuffer[$pix_addr]=$pix_val
 fi
 if [ $4 -eq 1 ]; then
 set_cursor $1 $2
-i2cset -y $I2CBUS $DEVADDR 0x40 $pix_val i
+i2cset -y $SSD1327_I2CBUS $SSD1327_DEVADDR 0x40 $pix_val i
 fi
 }
 

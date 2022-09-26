@@ -2,8 +2,8 @@
 
 # code written by Ahmad Byagowi for demonstration purposes of the SI7020 chip over the i2c bus
 
-I2CBUS=10
-DEVADDR=0x40
+SI7020_I2CBUS=10
+SI7020_DEVADDR=0x40
 
 SI7020_A20_MEAS_RH_HOLD=0xE5 # Measure Relative Humidity, Hold Master Mode
 SI7020_A20_MEAS_RH_NOHOLD=0xF5 # Measure Relative Humidity, No Hold Master Mode
@@ -18,11 +18,11 @@ SI7020_A20_READHEATER_REG=0x11 # Read Heater Control Register
 
 function humidity(){
 
-i2cset -y $I2CBUS $DEVADDR 0xE5 0x01
-local raw_humidity=$(i2cget -y $I2CBUS $DEVADDR 0xE5 w)
+i2cset -y $SI7020_I2CBUS $SI7020_DEVADDR 0xE5 0x01
+local raw_humidity=$(i2cget -y $SI7020_I2CBUS $SI7020_DEVADDR 0xE5 w)
 
-i2cset -y $I2CBUS $DEVADDR 0xE3 0x01
-local raw_temp=$(i2cget -y $I2CBUS $DEVADDR 0xE3 w)
+i2cset -y $SI7020_I2CBUS $SI7020_DEVADDR 0xE3 0x01
+local raw_temp=$(i2cget -y $SI7020_I2CBUS $SI7020_DEVADDR 0xE3 w)
 
 humidity=$(($(($raw_humidity*124))-$((65536*6))))
 
